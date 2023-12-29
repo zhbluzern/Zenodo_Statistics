@@ -26,7 +26,7 @@ This script makes usage of the following python libraries
 * `argparse`
 * `pandas`
 
-## Run `Calculate by Communities
+## Run `community_stats.py` - Calculate by Communities
 
 * Search for records by a given Zenodo-Community name
 * The Script sums up `version_unique_downloads` and `version_unique_views` for each community detected in a record
