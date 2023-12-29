@@ -18,7 +18,7 @@ This python script allows you to calculate statistics of your [Zenodo](https://z
 ```
 * Write an output as *xlsx.
 
-## Dependecies
+## Dependencies
 
 This script makes usage of the following python libraries
 
