@@ -3,7 +3,7 @@ import argparse
 import pandas as pd
 
 # Erstelle den ArgumentParser
-parser = argparse.ArgumentParser(description='Fetch all records of a Zenodo Community via REST-API', usage="python3 community_stats.py --community={YOUR_COMMUNITY}")
+parser = argparse.ArgumentParser(description='Fetch all records of a Zenodo Community via REST-API', usage="python3 community_stats.py --community {YOUR_COMMUNITY} --output {YOUR_OUTPUTFile.xlsx}")
 # Füge das Argument 'shoulder' hinzu
 parser.add_argument('--community', '-c', required=True, help='Your Zenodo-Community', )
 parser.add_argument('--size', '-s', required=False, help='Define your costum number of records per one API-Call', )
