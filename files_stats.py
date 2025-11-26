@@ -1,4 +1,5 @@
 import os
+import argparse
 import requests
 from dotenv import load_dotenv
 
@@ -8,11 +9,21 @@ load_dotenv()
 # Token aus der .env lesen
 ACCESS_TOKEN = os.getenv("ZENODO_TOKEN")
 
+# Erstelle den ArgumentParser
+parser = argparse.ArgumentParser(description='Check file size of a Zenodo Community via REST-API', usage="py files_stats.py --community {YOUR_COMMUNITY}")
+# Füge das Argument 'shoulder' hinzu
+parser.add_argument('--community', '-c', required=True, help='Your Zenodo-Community', )
+# Parse die Argumente
+args = parser.parse_args()
+
+
 ZENODO_API = "https://zenodo.org/api/records"
 # Name der Community festlegen
-COMMUNITY = "lory_hslu"  
+COMMUNITY = args.community  
 page = 1
 total_bytes = 0
+# API-Doku: mit token max 100 pro Seite, ohne token / wenn instabil: 25
+size = "100" 
 
 
 headers = {}
@@ -21,7 +32,7 @@ headers["Authorization"] = f"Bearer {ACCESS_TOKEN}"
 
 params = {
         "communities": COMMUNITY,
-        "size": 25,
+        "size": size,
     }
 
 

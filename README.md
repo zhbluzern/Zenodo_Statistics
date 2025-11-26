@@ -34,3 +34,16 @@ This script makes usage of the following python libraries
 ```bash
 python3 community_stats.py -c {YOUR_COMMUNITY} -o {YOUR_OUTPUTFILE.xlsx}
 ```
+
+# Files storage size
+
+This python script allows you to calculate the storage space of your [Zenodo](https://zenodo.org) repository. 
+
+## Run `files_stats.py` - Calculate by Communities
+
+* Search for record size by a given Zenodo-Community name
+* The Script sums up `files[size]` of each record and transforms in MB and GB of storage for each community 
+
+```bash
+python3 files_stats.py -c {YOUR_COMMUNITY}
+```
