@@ -1,6 +1,14 @@
 import requests
 import argparse
 import pandas as pd
+import os
+from dotenv import load_dotenv
+
+# .env laden
+load_dotenv()
+
+# Token aus der .env lesen
+ACCESS_TOKEN = os.getenv("ZENODO_TOKEN")
 
 # Erstelle den ArgumentParser
 parser = argparse.ArgumentParser(description='Fetch all records of a Zenodo Community via REST-API', usage="python3 community_stats.py --community {YOUR_COMMUNITY} --output {YOUR_OUTPUTFile.xlsx}")
@@ -14,6 +22,7 @@ args = parser.parse_args()
 zenodoRestUrl = "https://zenodo.org/api/records"
 headers = {}
 headers["Content-Type"] = "application/json"
+headers["Authorization"] = f"Bearer {ACCESS_TOKEN}"
 
 # Zugriff auf das Argument 'Size'    
 if args.size:
@@ -25,10 +34,29 @@ params = { "communities":  args.community, "size": size}
 
 
 def getRecords():
-    r = requests.get(f"{zenodoRestUrl}", params=params, headers=headers)
-    return r.json()
+    r = requests.get(f"{zenodoRestUrl}", params=params, headers=headers, timeout=30)
+    r.raise_for_status()
+    
+    ctype = r.headers.get("Content-Type", "")
+    if "application/json" in ctype:
+        try:
+            return r.json()
+        except ValueError as e:  # JSONDecodeError ist Unterklasse von ValueError
+            # Debug-Ausgabe: zeige Beginn des Antworttexts
+            print("JSON parsing failed. First 500 chars of response:\n", r.text[:500])
+            raise
+    else:
+        # Nicht-JSON – z. B. HTML-Fehlerseite oder leerer Text
+        print("Unexpected Content-Type:", ctype)
+        print("Status:", r.status_code)
+        print("First 500 chars of response:\n", r.text[:500])
+        raise RuntimeError("API did not return JSON")
+
+    #return r.json()
 
 result = getRecords()
+#print(result)
+print(f"Fetched {len(result['hits']['hits'])} records from Zenodo Community: {args.community}")
 numOfRec = (result["hits"]["total"])
 
 localRecordCounter = 1
